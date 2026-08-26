@@ -1,0 +1,20 @@
+# WRDS 授權資料一律不進版控（只保留 manifest 與 hash）
+data/
+artifacts/
+*.csv
+*.parquet
+*.pkl
+
+# 憑證
+.env
+.env.*
+!.env.example
+*.pgpass
+
+# Python
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
