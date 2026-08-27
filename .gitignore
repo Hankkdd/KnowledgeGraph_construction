@@ -1,9 +1,11 @@
-# WRDS 授權資料一律不進版控（只保留 manifest 與 hash）
-data/
-artifacts/
-*.csv
+# WRDS 授權資料不進版控，但 provenance 要進：
+# *.manifest.json（SQL、SHA-256、抽取時間、上游）與驗證報告都要能被 review。
+# 因此不忽略 data/ 與 artifacts/ 這兩個目錄本身——git 無法在被忽略的目錄底下
+# 重新納入檔案，只能改成按副檔名忽略。
 *.parquet
+*.csv
 *.pkl
+*.feather
 
 # 憑證
 .env

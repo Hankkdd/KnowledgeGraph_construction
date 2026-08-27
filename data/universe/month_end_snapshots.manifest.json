@@ -1,0 +1,25 @@
+{
+  "name": "month_end_snapshots",
+  "rows": 765164,
+  "columns": [
+    "rebal_dt",
+    "permno",
+    "dlycap",
+    "dlyprc",
+    "ticker",
+    "siccd",
+    "primaryexch"
+  ],
+  "output": "data/universe/month_end_snapshots.parquet",
+  "sha256": "9cb9727a224a80b43c6d4ad57feca5fd093e267f0bacd7893bf3b3b87e8d88d6",
+  "extracted_at": "2026-08-26T08:39:27+00:00",
+  "git_commit": "75d458335de8d2cf12d49c7a9792de7a8596acf4",
+  "wrds_user": "hankdd",
+  "sql": "with month_end as ( select max(dlycaldt) as rebal_dt from crsp.dsf_v2 where dlycaldt between %s and %s group by date_trunc('month', dlycaldt) ) select d.dlycaldt as rebal_dt, d.permno, d.dlycap, d.dlyprc, d.ticker, d.siccd, d.primaryexch from crsp.dsf_v2 d join month_end m on m.rebal_dt = d.dlycaldt where d.sharetype = 'NS' and d.securitytype = 'EQTY' and d.securitysubtype = 'COM' and d.usincflg = 'Y' and d.primaryexch in ('N', 'A', 'Q') and d.dlycap is not null and d.dlycap > 0 order by d.dlycaldt, d.dlycap desc, d.permno",
+  "params": [
+    "2010-01-01",
+    "2025-12-31"
+  ],
+  "derived_from": null,
+  "note": "2010-01-01..2025-12-31 每月最後交易日的合格普通股與市值"
+}

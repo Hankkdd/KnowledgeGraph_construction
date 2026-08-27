@@ -107,8 +107,6 @@ def _sha256(path: Path) -> str:
 @dataclass
 class Manifest:
     name: str
-    sql: str
-    params: list | None
     rows: int
     columns: list[str]
     output: str
@@ -116,7 +114,97 @@ class Manifest:
     extracted_at: str
     git_commit: str | None
     wrds_user: str
+    sql: str | None = None
+    params: list | None = None
+    derived_from: list[str] | None = None
     note: str | None = None
+
+
+def coerce_dates(df: pd.DataFrame) -> pd.DataFrame:
+    """把 psycopg2 回傳的 `datetime.date` 欄位轉成 datetime64。
+
+    保持 object dtype 的話，只要欄位裡混進一個 NaN（例如開放區間的結束日），
+    整欄就變成 date 與 float 混合，`max()`、比較與 groupby 都會炸。
+    在寫檔與讀檔兩端都做，確保下游拿到的一律是 datetime64。
+    """
+    import datetime as _dt
+
+    for col in df.columns:
+        if df[col].dtype != object:
+            continue
+        non_null = df[col].dropna()
+        if non_null.empty:
+            continue
+        if isinstance(non_null.iloc[0], (_dt.date, _dt.datetime)):
+            df[col] = pd.to_datetime(df[col], errors="coerce")
+    return df
+
+
+def coerce_numerics(df: pd.DataFrame) -> pd.DataFrame:
+    """把 psycopg2 回傳的 `Decimal` 欄位轉成 float64。
+
+    CRSP 的 numeric 欄位（`dlyret`、`dlycap`、`dlyprc` …）預設會是 Decimal，
+    留著的話 `np.log`、`np.corrcoef`、`torch.tensor` 全都會拒絕接受：
+
+        TypeError: loop of ufunc does not support argument 0 of type
+        decimal.Decimal which has no callable log method
+
+    排序與比較不受影響，所以問題會一路潛伏到建圖才爆。在存取層轉掉，
+    下游不必各自記得 `pd.to_numeric`。
+    """
+    from decimal import Decimal
+
+    for col in df.columns:
+        if df[col].dtype != object:
+            continue
+        non_null = df[col].dropna()
+        if non_null.empty:
+            continue
+        if isinstance(non_null.iloc[0], Decimal):
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    return df
+
+
+def _write(name: str, df: pd.DataFrame, subdir: str, **manifest_fields) -> Manifest:
+    """共用的落檔與 manifest 寫出。"""
+    df = coerce_numerics(coerce_dates(df))
+    out_dir = DATA_DIR / subdir if subdir else DATA_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / f"{name}.parquet"
+    df.to_parquet(out_path, index=False)
+
+    manifest = Manifest(
+        name=name,
+        rows=len(df),
+        columns=list(df.columns),
+        output=str(out_path.relative_to(REPO_ROOT)),
+        sha256=_sha256(out_path),
+        extracted_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        git_commit=_git_commit(),
+        wrds_user=os.environ.get("WRDS_USER", "?"),
+        **manifest_fields,
+    )
+    (out_dir / f"{name}.manifest.json").write_text(
+        json.dumps(asdict(manifest), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+    return manifest
+
+
+def save_derived(
+    name: str,
+    df: pd.DataFrame,
+    *,
+    derived_from: list[str],
+    subdir: str = "",
+    note: str | None = None,
+) -> Manifest:
+    """保存由既有抽取結果算出來的資料。
+
+    `derived_from` 列出上游 manifest 的 name，讓 provenance 鏈接得起來——
+    衍生檔沒有自己的 SQL，只有上游加上算法。
+    """
+    return _write(name, df, subdir, derived_from=derived_from, note=note)
 
 
 def extract(
@@ -147,28 +235,11 @@ def extract(
         if owns_conn:
             conn.close()
 
-    out_dir = DATA_DIR / subdir if subdir else DATA_DIR
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"{name}.parquet"
-    df.to_parquet(out_path, index=False)
-
-    manifest = Manifest(
-        name=name,
+    manifest = _write(
+        name, df, subdir,
         sql=" ".join(sql.split()),
-        params=list(params) if params else None,
-        rows=len(df),
-        columns=list(df.columns),
-        output=str(out_path.relative_to(REPO_ROOT)),
-        sha256=_sha256(out_path),
-        extracted_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        git_commit=_git_commit(),
-        wrds_user=os.environ.get("WRDS_USER", "?"),
+        params=[str(p) for p in params] if params else None,
         note=note,
-    )
-    manifest_path = out_dir / f"{name}.manifest.json"
-    manifest_path.write_text(
-        json.dumps(asdict(manifest), ensure_ascii=False, indent=2),
-        encoding="utf-8",
     )
     return df, manifest
 
@@ -189,4 +260,4 @@ def load(name: str, subdir: str = "") -> pd.DataFrame:
                 f"{path} 的 SHA-256 與 manifest 不符（資料被改動過）。"
                 f"\n  manifest: {recorded}\n  actual:   {actual}"
             )
-    return pd.read_parquet(path)
+    return coerce_numerics(coerce_dates(pd.read_parquet(path)))

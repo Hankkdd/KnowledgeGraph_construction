@@ -1,0 +1,28 @@
+{
+  "name": "members_top500",
+  "rows": 96000,
+  "columns": [
+    "n_target",
+    "rebal_dt",
+    "rank",
+    "permno",
+    "dlycap",
+    "dlyprc",
+    "ticker",
+    "siccd",
+    "primaryexch",
+    "valid_from",
+    "valid_to"
+  ],
+  "output": "data/universe/members_top500.parquet",
+  "sha256": "a524ce8421f7fb58978de681ff29b2f6fe050508e1a78269b6893ec024a9519e",
+  "extracted_at": "2026-08-26T08:39:32+00:00",
+  "git_commit": "75d458335de8d2cf12d49c7a9792de7a8596acf4",
+  "wrds_user": "hankdd",
+  "sql": null,
+  "params": null,
+  "derived_from": [
+    "month_end_snapshots"
+  ],
+  "note": "每月末依 dlycap 取前 500 名，平手以 permno 決勝"
+}

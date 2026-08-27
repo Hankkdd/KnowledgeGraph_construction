@@ -1,0 +1,73 @@
+{
+  "prices": {
+    "rows": 3551681,
+    "trading_days": 4130,
+    "first_day": "2009-08-03",
+    "last_day": "2025-12-31",
+    "distinct_permno": 1136,
+    "dlyret_missing": 3633
+  },
+  "warmup_policy": "asset-level mask：成員在 rebalance 日往前 60 個交易日內有效 dlyret 不足 60 筆時，該 (日期, 成員) 從建圖與評估中排除，整個 rebalance 日仍保留。mask 在 real 與所有 control 之間完全一致。",
+  "universes": {
+    "top30": {
+      "rebalance_dates": 192,
+      "exact_n_all_dates": true,
+      "distinct_members": 61,
+      "interval_overlaps": 0,
+      "re_entries": 126,
+      "turnover_mean": 0.02739965095986038,
+      "turnover_max": 0.13333333333333333,
+      "warmup_full_ratio": 0.9994791666666667,
+      "warmup_incomplete_dates": 3,
+      "masked_member_dates": 3,
+      "gap_days": 0,
+      "ended_in_membership": 0,
+      "ever_member_ended": 0,
+      "ever_member_ended_ratio": 0.0,
+      "delflg_delisted": 0,
+      "delisting_sources_agree": true,
+      "top10_share_mean": 0.5517329513969057,
+      "top10_share_last": 0.7143075213220456
+    },
+    "top100": {
+      "rebalance_dates": 192,
+      "exact_n_all_dates": true,
+      "distinct_members": 222,
+      "interval_overlaps": 0,
+      "re_entries": 405,
+      "turnover_mean": 0.027591623036649214,
+      "turnover_max": 0.07,
+      "warmup_full_ratio": 0.9989583333333333,
+      "warmup_incomplete_dates": 18,
+      "masked_member_dates": 20,
+      "gap_days": 0,
+      "ended_in_membership": 13,
+      "ever_member_ended": 26,
+      "ever_member_ended_ratio": 0.11711711711711711,
+      "delflg_delisted": 26,
+      "delisting_sources_agree": true,
+      "top10_share_mean": 0.34471296474645285,
+      "top10_share_last": 0.5178450932026816
+    },
+    "top500": {
+      "rebalance_dates": 192,
+      "exact_n_all_dates": true,
+      "distinct_members": 1136,
+      "interval_overlaps": 0,
+      "re_entries": 1502,
+      "turnover_mean": 0.02238743455497382,
+      "turnover_max": 0.054,
+      "warmup_full_ratio": 0.99728125,
+      "warmup_incomplete_dates": 142,
+      "masked_member_dates": 261,
+      "gap_days": 0,
+      "ended_in_membership": 157,
+      "ever_member_ended": 307,
+      "ever_member_ended_ratio": 0.27024647887323944,
+      "delflg_delisted": 307,
+      "delisting_sources_agree": true,
+      "top10_share_mean": 0.22903149958359462,
+      "top10_share_last": 0.38787449618766806
+    }
+  }
+}
