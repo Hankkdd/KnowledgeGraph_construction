@@ -4,3 +4,4 @@ psycopg2-binary>=2.9
 pyarrow>=15.0
 scipy>=1.11
 pytest>=8.0
+tabulate>=0.9
