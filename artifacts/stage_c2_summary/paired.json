@@ -1,0 +1,99 @@
+{
+  "paired": [
+    {
+      "universe": 30,
+      "control": "self",
+      "mean_effect": -0.0061549936710330365,
+      "seed_wins": 1,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.1875,
+      "passes_exploratory": false
+    },
+    {
+      "universe": 100,
+      "control": "self",
+      "mean_effect": -0.021759135563362432,
+      "seed_wins": 0,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": false
+    },
+    {
+      "universe": 500,
+      "control": "self",
+      "mean_effect": 0.009894485501728495,
+      "seed_wins": 5,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": true
+    },
+    {
+      "universe": 30,
+      "control": "relation_shuffle",
+      "mean_effect": 0.010285328602468563,
+      "seed_wins": 5,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": true
+    },
+    {
+      "universe": 100,
+      "control": "relation_shuffle",
+      "mean_effect": -0.0001589039152710671,
+      "seed_wins": 2,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.8125,
+      "passes_exploratory": false
+    },
+    {
+      "universe": 500,
+      "control": "relation_shuffle",
+      "mean_effect": 0.003217570501970445,
+      "seed_wins": 5,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": true
+    },
+    {
+      "universe": 30,
+      "control": "topology_shuffle",
+      "mean_effect": -0.011521687785242648,
+      "seed_wins": 0,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": false
+    },
+    {
+      "universe": 100,
+      "control": "topology_shuffle",
+      "mean_effect": -0.010714441157978946,
+      "seed_wins": 0,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": false
+    },
+    {
+      "universe": 500,
+      "control": "topology_shuffle",
+      "mean_effect": 0.0046880720892175255,
+      "seed_wins": 5,
+      "n_seeds": 5,
+      "wilcoxon_p": 0.0625,
+      "passes_exploratory": true
+    }
+  ],
+  "verdict": {
+    "passing": {
+      "30": false,
+      "100": false,
+      "500": true
+    },
+    "min_effects": {
+      "30": -0.011521687785242648,
+      "100": -0.021759135563362432,
+      "500": 0.003217570501970445
+    },
+    "monotone_in_universe": false,
+    "verdict": "混合結果，需逐項檢視，不得挑選有利的 universe 陳述"
+  }
+}
