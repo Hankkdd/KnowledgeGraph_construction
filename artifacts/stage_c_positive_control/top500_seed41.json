@@ -15,49 +15,77 @@
       "variant": "no_graph",
       "train_loss_first": 0.9684026236423529,
       "train_loss_last": 0.9591676592013683,
-      "target_variance": 1.2549590549674292,
-      "beats_mean_predictor": true,
+      "train_target_variance": 1.248181833115047,
+      "beats_mean_on_train": true,
+      "test_mse": 1.0457435259242747,
+      "test_target_variance": 1.2549590549674292,
+      "beats_mean_on_test": true,
       "test_rank_ic": 0.5148206731688673,
       "n_test_days": 230,
-      "runtime_seconds": 20.502217826026026
+      "runtime_seconds": 18.527733293012716
     },
     {
       "variant": "self",
       "train_loss_first": 0.9609585364551206,
       "train_loss_last": 0.9588737874857237,
-      "target_variance": 1.2549590549674292,
-      "beats_mean_predictor": true,
+      "train_target_variance": 1.248181833115047,
+      "beats_mean_on_train": true,
+      "test_mse": 1.0394308282501024,
+      "test_target_variance": 1.2549590549674292,
+      "beats_mean_on_test": true,
       "test_rank_ic": 0.5149391790222371,
       "n_test_days": 230,
-      "runtime_seconds": 26.864509951963555
+      "runtime_seconds": 24.32285650598351
     },
     {
       "variant": "real",
-      "train_loss_first": 0.6700595668116825,
-      "train_loss_last": 0.6444804179717216,
-      "target_variance": 1.2549590549674292,
-      "beats_mean_predictor": true,
-      "test_rank_ic": 0.8032858382447925,
+      "train_loss_first": 0.6703552559404387,
+      "train_loss_last": 0.6409037453903833,
+      "train_target_variance": 1.248181833115047,
+      "beats_mean_on_train": true,
+      "test_mse": 1.1360625138648432,
+      "test_target_variance": 1.2549590549674292,
+      "beats_mean_on_test": true,
+      "test_rank_ic": 0.803252502469966,
       "n_test_days": 230,
-      "runtime_seconds": 40.35720498400042
+      "runtime_seconds": 37.073277751973365
+    },
+    {
+      "variant": "relation_shuffle",
+      "train_loss_first": 0.6744700487687838,
+      "train_loss_last": 0.6415181125007254,
+      "train_target_variance": 1.248181833115047,
+      "beats_mean_on_train": true,
+      "test_mse": 1.1674197366309962,
+      "test_target_variance": 1.2549590549674292,
+      "beats_mean_on_test": true,
+      "test_rank_ic": 0.8019128335858309,
+      "n_test_days": 230,
+      "runtime_seconds": 37.26050499099074
     },
     {
       "variant": "topology_shuffle",
-      "train_loss_first": 0.9509299198244311,
-      "train_loss_last": 0.9311795355841049,
-      "target_variance": 1.2549590549674292,
-      "beats_mean_predictor": true,
-      "test_rank_ic": 0.5249324838399615,
+      "train_loss_first": 0.9510434030835984,
+      "train_loss_last": 0.9308793681380205,
+      "train_target_variance": 1.248181833115047,
+      "beats_mean_on_train": true,
+      "test_mse": 1.004737203153639,
+      "test_target_variance": 1.2549590549674292,
+      "beats_mean_on_test": true,
+      "test_rank_ic": 0.5253933917803423,
       "n_test_days": 230,
-      "runtime_seconds": 44.53879353904631
+      "runtime_seconds": 42.02729481802089
     }
   ],
   "verdict": {
     "model_can_learn": true,
     "model_uses_graph_structure": true,
-    "real_ic": 0.8032858382447925,
-    "topology_shuffle_ic": 0.5249324838399615,
-    "gap": 0.278353354404831,
+    "signal_is_topological": true,
+    "real_ic": 0.803252502469966,
+    "relation_shuffle_ic": 0.8019128335858309,
+    "topology_shuffle_ic": 0.5253933917803423,
+    "gap_vs_topology": 0.27785911068962377,
+    "gap_vs_relation": 0.00133966888413517,
     "pass": true
   }
 }

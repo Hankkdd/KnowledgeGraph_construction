@@ -35,7 +35,7 @@ C1 五個 variant 的最終 train loss              0.006886 – 0.006900
 | 圖 | 真實 G_corr，k=5 |
 | Target | 合成：鄰居特徵平均，橫斷面標準化後加雜訊 |
 | 訊噪比 | 2:1（`noise=0.5`） |
-| Variants | no_graph、self、real、topology_shuffle |
+| Variants | no_graph、self、real、relation_shuffle、topology_shuffle |
 | Epochs / seed | 3 / 41 |
 
 target 一律由**真實**圖產生；variant 只改模型看得到的圖。因此 `topology_shuffle`
@@ -43,28 +43,46 @@ target 一律由**真實**圖產生；variant 只改模型看得到的圖。因�
 
 ## 判準
 
-兩項缺一不可：
+三項缺一不可：
 
-1. `real` 的 test Rank IC > 0.5，且優於常數預測器 → 模型學得會
+1. `real` 的 test Rank IC > 0.5，且在訓練期與測試期都優於各自的常數預測器
+   → 模型學得會
 2. `real` − `topology_shuffle` > 0.2 → 學到的是圖結構，不是節點自身特徵
+3. `real` 與 `relation_shuffle` 的差距小於它與 `topology_shuffle` 的差距
+   → 量到的是拓樸訊號，不是 relation label 或 edge weight 的意外效果
+
+第 3 項是因為合成訊號只依賴鄰居拓樸，完全不依賴 relation label。
+`relation_shuffle` 因此應該接近 `real`；若它也大幅下降，代表這個測量抓到的
+不是我們以為的東西。
 
 ## Result
 
-| variant | train loss | test Rank IC |
-|---|---|---:|
-| no_graph | 0.968 → 0.959 | +0.5148 |
-| self | 0.961 → 0.959 | +0.5149 |
-| real | 0.670 → 0.644 | **+0.8033** |
-| topology_shuffle | 0.951 → 0.931 | +0.5249 |
+train baseline 1.2482，test baseline 1.2550——兩者分開計算，
+拿測試期的變異數去比訓練 loss 是不同資料區間，比較沒有意義。
 
-target 變異數 1.255，四個 variant 的最終 loss 都低於它。
-`real` − `topology_shuffle` = **+0.2784**。
+| variant | train loss | test MSE | test Rank IC |
+|---|---|---|---:|
+| no_graph | 0.959 | 1.046 | +0.5148 |
+| self | 0.959 | 1.039 | +0.5149 |
+| real | **0.641** | 1.136 | **+0.8033** |
+| relation_shuffle | 0.642 | 1.167 | **+0.8019** |
+| topology_shuffle | 0.931 | 1.005 | +0.5254 |
 
-**PASS。**
+五個 variant 在訓練期與測試期都勝過各自的常數預測器。
+
+```text
+real            +0.8033
+relation_shuffle +0.8019   gap 0.0013  ← 打亂標籤幾乎沒有影響
+topology_shuffle +0.5254   gap 0.2779  ← 打亂鄰居就掉回基準線
+```
+
+**PASS，三項判準全數成立。**
 
 `no_graph` 拿到 0.51 是預期的：訊號是鄰居特徵的平均，與節點自身特徵有相關，
-所以不看圖也能取得一部分。關鍵在於只有 `real` 能再往上走到 0.80，而
-`topology_shuffle` 停在 0.52——多出來的部分只能來自正確的鄰居。
+所以不看圖也能取得一部分。關鍵在於只有看得到正確鄰居的兩個 variant 能走到 0.80。
+
+`relation_shuffle` 與 `real` 幾乎相同，正是合成訊號的設計所預測的結果。
+這排除了「多出來的 0.28 來自 relation 或 weight 的意外效果」這個解釋。
 
 ## 一個附帶結論：3 epochs 的訓練預算夠用
 

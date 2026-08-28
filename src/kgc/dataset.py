@@ -59,10 +59,16 @@ class Panel:
 
     @classmethod
     def load(cls, n: int) -> "Panel":
-        return cls(
-            wrds_io.load("daily_prices", subdir="prices"),
-            wrds_io.load(f"members_top{n}", subdir="universe"),
-        )
+        """載入時就把價格裁到該 universe 的成員。
+
+        `daily_prices` 是 top-500 成員聯集的 1,136 檔；top-30 只用到 61 檔。
+        不裁的話每個 sweep subprocess 都要為了 61 檔建一個 1,136 欄的矩陣，
+        載入時間會佔掉單位耗時的一半以上。
+        """
+        members = wrds_io.load(f"members_top{n}", subdir="universe")
+        prices = wrds_io.load("daily_prices", subdir="prices")
+        wanted = set(members["permno"].unique())
+        return cls(prices[prices["permno"].isin(wanted)].copy(), members)
 
     def _build_membership(self, members: pd.DataFrame) -> dict:
         """每個 rebalance 期間對應的成員索引。"""

@@ -34,7 +34,11 @@ from kgc import dataset, gate, graphs, wrds_io
 from kgc.model import GraphReturnModel, node_features
 
 OUT_DIR = wrds_io.REPO_ROOT / "artifacts" / "stage_c_positive_control"
-VARIANTS = ("no_graph", "self", "real", "topology_shuffle")
+
+# 與 C2 相同的五個 variant。合成 target 只依賴鄰居拓樸、不依賴 relation label，
+# 所以 relation_shuffle 應該接近 real，topology_shuffle 應該明顯掉下來——
+# 這組對比確認我們量到的是拓樸訊號，不是 relation 或 edge weight 的意外效果。
+VARIANTS = ("no_graph", "self", "real", "relation_shuffle", "topology_shuffle")
 
 
 def planted_target(features: np.ndarray, graph: graphs.Graph,
@@ -69,7 +73,8 @@ def run(panel, train_dates, test_dates, variant, seed, epochs, device,
 
     started = time.perf_counter()
     losses = []
-    for _ in range(epochs):
+    train_baseline: list[float] = []
+    for epoch_i in range(epochs):
         model.train()
         epoch = []
         for date in train_dates:
@@ -89,10 +94,13 @@ def run(panel, train_dates, test_dates, variant, seed, epochs, device,
             loss.backward()
             optimizer.step()
             epoch.append(float(loss.detach().cpu()))
+            if epoch_i == 0:
+                # 訓練期自己的 mean-predictor 基準，不能拿測試期的變異數來比。
+                train_baseline.append(float(np.mean(y_np ** 2)))
         losses.append(float(np.mean(epoch)))
 
     model.eval()
-    ics, baseline = [], []
+    ics, baseline, test_mse = [], [], []
     with torch.no_grad():
         for date in test_dates:
             model_graph, kept = gate.graph_for(panel, date, variant, seed)
@@ -107,13 +115,19 @@ def run(panel, train_dates, test_dates, variant, seed, epochs, device,
                 continue
             ics.append(float(spearmanr(pred, y_np).statistic))
             baseline.append(float(np.mean(np.square(y_np))))
+            test_mse.append(float(np.mean(np.square(pred - y_np))))
 
+    train_var = float(np.mean(train_baseline))
+    test_var = float(np.mean(baseline))
     return {
         "variant": variant,
         "train_loss_first": losses[0],
         "train_loss_last": losses[-1],
-        "target_variance": float(np.mean(baseline)),
-        "beats_mean_predictor": bool(losses[-1] < np.mean(baseline)),
+        "train_target_variance": train_var,
+        "beats_mean_on_train": bool(losses[-1] < train_var),
+        "test_mse": float(np.mean(test_mse)),
+        "test_target_variance": test_var,
+        "beats_mean_on_test": bool(np.mean(test_mse) < test_var),
         "test_rank_ic": float(np.mean(ics)),
         "n_test_days": len(ics),
         "runtime_seconds": time.perf_counter() - started,
@@ -154,22 +168,34 @@ def main() -> int:
         r = run(panel, train_dates, test_dates, variant, args.seed,
                 args.epochs, device, args.beta, args.noise, args.lr)
         results.append(r)
-        print(f"{r['variant']:18s} loss {r['train_loss_first']:.6f} -> "
-              f"{r['train_loss_last']:.6f}  (var {r['target_variance']:.6f}, "
-              f"beats_mean={r['beats_mean_predictor']})  "
+        print(f"{r['variant']:18s} "
+              f"train {r['train_loss_last']:.4f}/{r['train_target_variance']:.4f} "
+              f"({'beats' if r['beats_mean_on_train'] else 'WORSE':>5s})  "
+              f"test {r['test_mse']:.4f}/{r['test_target_variance']:.4f} "
+              f"({'beats' if r['beats_mean_on_test'] else 'WORSE':>5s})  "
               f"IC {r['test_rank_ic']:+.4f}  {r['runtime_seconds']:.0f}s", flush=True)
 
     by = {r["variant"]: r for r in results}
     real_ic = by["real"]["test_rank_ic"]
-    shuffled_ic = by["topology_shuffle"]["test_rank_ic"]
+    topo_ic = by["topology_shuffle"]["test_rank_ic"]
+    rel_ic = by["relation_shuffle"]["test_rank_ic"]
     verdict = {
-        "model_can_learn": bool(by["real"]["beats_mean_predictor"] and real_ic > 0.5),
-        "model_uses_graph_structure": bool(real_ic - shuffled_ic > 0.2),
+        "model_can_learn": bool(by["real"]["beats_mean_on_train"]
+                                and by["real"]["beats_mean_on_test"]
+                                and real_ic > 0.5),
+        "model_uses_graph_structure": bool(real_ic - topo_ic > 0.2),
+        # 合成 target 只依賴拓樸，所以 relation_shuffle 應該接近 real。
+        # 若它也大幅下降，代表量到的不是純拓樸訊號。
+        "signal_is_topological": bool(abs(real_ic - rel_ic) < abs(real_ic - topo_ic)),
         "real_ic": real_ic,
-        "topology_shuffle_ic": shuffled_ic,
-        "gap": real_ic - shuffled_ic,
+        "relation_shuffle_ic": rel_ic,
+        "topology_shuffle_ic": topo_ic,
+        "gap_vs_topology": real_ic - topo_ic,
+        "gap_vs_relation": real_ic - rel_ic,
     }
-    verdict["pass"] = verdict["model_can_learn"] and verdict["model_uses_graph_structure"]
+    verdict["pass"] = (verdict["model_can_learn"]
+                       and verdict["model_uses_graph_structure"]
+                       and verdict["signal_is_topological"])
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / f"top{args.universe}_seed{args.seed}.json").write_text(
@@ -179,8 +205,10 @@ def main() -> int:
 
     print(f"\n模型學得會植入訊號   {verdict['model_can_learn']}")
     print(f"模型用到了圖結構     {verdict['model_uses_graph_structure']} "
-          f"(real {real_ic:+.4f} vs shuffle {shuffled_ic:+.4f}, "
-          f"gap {verdict['gap']:+.4f})")
+          f"(real {real_ic:+.4f} vs topology {topo_ic:+.4f}, "
+          f"gap {verdict['gap_vs_topology']:+.4f})")
+    print(f"訊號來自拓樸而非標籤 {verdict['signal_is_topological']} "
+          f"(relation {rel_ic:+.4f}, gap {verdict['gap_vs_relation']:+.4f})")
     print(f"正控制               {'PASS' if verdict['pass'] else 'FAIL'}")
     return 0 if verdict["pass"] else 1
 

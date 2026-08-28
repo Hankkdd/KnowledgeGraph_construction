@@ -41,6 +41,28 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
+def _git_commit() -> str | None:
+    import subprocess
+    out = subprocess.run(["git", "rev-parse", "--verify", "HEAD"],
+                         capture_output=True, text=True,
+                         cwd=Path(__file__).resolve().parents[1])
+    return out.stdout.strip() or None if out.returncode == 0 else None
+
+
+def _manifest_hashes(universe: int) -> dict:
+    """上游資料的 SHA-256，讓每個 run 綁定到它實際用的資料版本。"""
+    root = Path(__file__).resolve().parents[1] / "data"
+    wanted = {
+        "members": root / "universe" / f"members_top{universe}.manifest.json",
+        "prices": root / "prices" / "daily_prices.manifest.json",
+    }
+    out = {}
+    for key, path in wanted.items():
+        if path.exists():
+            out[key] = json.loads(path.read_text(encoding="utf-8"))["sha256"]
+    return out
+
+
 def main() -> int:
     args = parse_args()
     if args.train_stride < 1 or args.test_stride < 1:
@@ -101,17 +123,20 @@ def main() -> int:
         results.append(result)
         print(json.dumps(result, indent=2))
 
+    stem = f"top{args.universe}_y{args.test_year}_seed{args.seed}"
     summary = {
-        "kind": "C1 convergence/runtime smoke; no RL episodes",
+        "kind": "supervised G_corr gate run",
         "universe": args.universe,
         "test_year": args.test_year,
         "seed": args.seed,
         "variants": variants,
         "fold": str(fold),
         "results": results,
+        "git_commit": _git_commit(),
+        "data_manifests": _manifest_hashes(args.universe),
         "total_runtime_seconds": time.perf_counter() - started,
     }
-    (args.output_dir / f"top{args.universe}_seed{args.seed}.json").write_text(
+    (args.output_dir / stem).with_suffix(".json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     lines = ["# Stage C1 convergence/runtime smoke", "",
              "This is an implementation smoke test; it is not a KG efficacy gate.", "",
@@ -124,7 +149,7 @@ def main() -> int:
             f"| {r['variant']} | {r['train_loss_first']:.6g} | {r['train_loss_last']:.6g} | "
             f"{r['test_rank_ic_mean']:.6g} | {r['test_mse']:.6g} | {r['runtime_seconds']:.2f} |"
         )
-    (args.output_dir / f"top{args.universe}_seed{args.seed}.md").write_text(
+    (args.output_dir / stem).with_suffix(".md").write_text(
         "\n".join(lines) + "\n", encoding="utf-8")
     return 0
 
