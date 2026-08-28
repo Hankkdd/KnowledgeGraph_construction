@@ -1,0 +1,3 @@
+2016: train=736 test=252
+  2016 seed41 real               IC +0.0217 over 252 days
+  2016 seed41 topology_shuffle   IC -0.0596 over 252 days
