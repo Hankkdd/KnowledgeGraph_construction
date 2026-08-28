@@ -65,6 +65,13 @@ def daily_ic(panel, train_dates, test_dates, variant, seed, device):
 
 
 def main() -> int:
+    cache = OUT_DIR / "daily_ic.json"
+    if "--from-cache" in __import__("sys").argv:
+        if not cache.exists():
+            raise SystemExit(f"{cache} 不存在，先完整跑一次")
+        ic = pd.read_json(cache)
+        return report(ic)
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     panel = dataset.Panel.load(UNIVERSE)
     folds = {f.test_year: f for f in dataset.walk_forward(panel.calendar)}
@@ -91,51 +98,71 @@ def main() -> int:
                       f"IC {df['ic'].mean():+.4f} over {len(df)} days", flush=True)
 
     ic = pd.concat(all_ic, ignore_index=True)
+    ic.to_json(OUT_DIR / "daily_ic.json", orient="records", date_format="iso")
+    return report(ic)
+
+
+def report(ic: pd.DataFrame) -> int:
     wide = ic.pivot_table(index=["year", "date", "seed"], columns="variant",
                           values="ic").reset_index()
     wide["diff"] = wide["real"] - wide["topology_shuffle"]
 
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
     lines = ["# 2016 逐日稽核", "",
              "重跑 2016 與 2017 折，保存每日 Rank IC。"
              "2017 作為基準年，避免把「逐日本來就很吵」誤讀成 2016 特殊。", ""]
 
+    # 集中度不能用「最大 N 天佔全年總和的比例」衡量：總和接近 0 時分母趨近零，
+    # 比例會變成無意義的大數或負數。改用移除最極端天數後殘留的效果，
+    # 那個量在總和接近零時仍然可解讀。
     summary = {}
     for year in YEARS:
-        sub = wide[wide["year"] == year]
-        by_date = sub.groupby("date")["diff"].mean()
-        total = by_date.sum()
-        ranked = by_date.reindex(by_date.abs().sort_values(ascending=False).index)
-        top5_share = float(ranked.head(5).sum() / total) if total else float("nan")
-        top20_share = float(ranked.head(20).sum() / total) if total else float("nan")
+        by_date = wide[wide["year"] == year].groupby("date")["diff"].mean()
+        order = by_date.abs().sort_values(ascending=False).index
+        trimmed = by_date[(by_date >= by_date.quantile(0.05)) &
+                          (by_date <= by_date.quantile(0.95))].mean()
+        drop40 = float(by_date.drop(order[:40]).mean())
+        per_seed = wide[wide["year"] == year].groupby("seed")["diff"].mean()
 
         summary[year] = {
             "mean_diff": float(by_date.mean()),
             "median_diff": float(by_date.median()),
+            "trimmed_mean_5_95": float(trimmed),
             "positive_days": int((by_date > 0).sum()),
             "n_days": int(len(by_date)),
-            "top5_day_share": top5_share,
-            "top20_day_share": top20_share,
+            "mean_after_dropping_10": float(by_date.drop(order[:10]).mean()),
+            "mean_after_dropping_40": drop40,
+            "retained_after_dropping_40": drop40 / float(by_date.mean()),
+            "seed_wins": int((per_seed > 0).sum()),
+            "n_seeds": int(len(per_seed)),
         }
         s = summary[year]
         lines += [
             f"## {year}", "",
             f"- 每日 `real − topology_shuffle` 平均 {s['mean_diff']:+.5f}、"
-            f"中位數 {s['median_diff']:+.5f}",
+            f"中位數 {s['median_diff']:+.5f}、去頭尾 5% 後 {s['trimmed_mean_5_95']:+.5f}",
             f"- 正值天數 {s['positive_days']}/{s['n_days']}"
             f"（{s['positive_days'] / s['n_days']:.1%}）",
-            f"- 絕對值最大的 5 天佔全年總和 {s['top5_day_share']:.1%}",
-            f"- 絕對值最大的 20 天佔全年總和 {s['top20_day_share']:.1%}", "",
+            f"- 移除絕對值最大的 10 天後 {s['mean_after_dropping_10']:+.5f}、"
+            f"40 天後 {s['mean_after_dropping_40']:+.5f}"
+            f"（保留原效果的 {s['retained_after_dropping_40']:.0%}）",
+            f"- seed 勝出 {s['seed_wins']}/{s['n_seeds']}", "",
         ]
 
-    verdict = ("集中在少數幾天，傾向抽樣雜訊"
-               if summary[2016]["top5_day_share"] > 0.5
-               else "全年普遍存在，傾向真實 regime")
+    # 去頭尾後效果不減、且移除 40 天仍保留可觀比例，才算全年普遍存在。
+    s16 = summary[2016]
+    broad = (s16["trimmed_mean_5_95"] >= 0.8 * s16["mean_diff"]
+             and s16["retained_after_dropping_40"] >= 0.3
+             and s16["seed_wins"] == s16["n_seeds"])
+    verdict = ("全年普遍存在，且五個 seed 一致，傾向真實 regime" if broad
+               else "集中在少數幾天或 seed 之間不一致，傾向抽樣雜訊")
     lines += ["## 判讀", "", f"2016：{verdict}", "",
-              "中位數與平均差距越大、少數天數佔比越高，越像雜訊而非穩定現象。", ""]
+              "判準是三項同時成立：去頭尾 5% 後效果不低於原值的八成、",
+              "移除絕對值最大的 40 天後仍保留三成以上、五個 seed 方向一致。",
+              "任一項不成立就代表效果依賴少數觀測或特定初始化。", ""]
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "daily_report.md").write_text("\n".join(lines), encoding="utf-8")
-    ic.to_json(OUT_DIR / "daily_ic.json", orient="records", date_format="iso")
     (OUT_DIR / "daily_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2, default=str),
         encoding="utf-8")

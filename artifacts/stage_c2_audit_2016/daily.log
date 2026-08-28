@@ -1,3 +1,46 @@
 2016: train=736 test=252
   2016 seed41 real               IC +0.0217 over 252 days
   2016 seed41 topology_shuffle   IC -0.0596 over 252 days
+  2016 seed42 real               IC +0.0128 over 252 days
+  2016 seed42 topology_shuffle   IC -0.0563 over 252 days
+  2016 seed43 real               IC +0.0429 over 252 days
+  2016 seed43 topology_shuffle   IC -0.0144 over 252 days
+  2016 seed44 real               IC +0.0451 over 252 days
+  2016 seed44 topology_shuffle   IC +0.0313 over 252 days
+  2016 seed45 real               IC +0.0498 over 252 days
+  2016 seed45 topology_shuffle   IC +0.0041 over 252 days
+2017: train=736 test=251
+  2017 seed41 real               IC +0.0092 over 251 days
+  2017 seed41 topology_shuffle   IC -0.0110 over 251 days
+  2017 seed42 real               IC +0.0245 over 251 days
+  2017 seed42 topology_shuffle   IC +0.0198 over 251 days
+  2017 seed43 real               IC +0.0260 over 251 days
+  2017 seed43 topology_shuffle   IC +0.0216 over 251 days
+  2017 seed44 real               IC +0.0273 over 251 days
+  2017 seed44 topology_shuffle   IC +0.0217 over 251 days
+  2017 seed45 real               IC +0.0279 over 251 days
+  2017 seed45 topology_shuffle   IC +0.0244 over 251 days
+# 2016 逐日稽核
+
+重跑 2016 與 2017 折，保存每日 Rank IC。2017 作為基準年，避免把「逐日本來就很吵」誤讀成 2016 特殊。
+
+## 2016
+
+- 每日 `real − topology_shuffle` 平均 +0.05341、中位數 +0.03226
+- 正值天數 148/252（58.7%）
+- 絕對值最大的 5 天佔全年總和 20.5%
+- 絕對值最大的 20 天佔全年總和 42.7%
+
+## 2017
+
+- 每日 `real − topology_shuffle` 平均 +0.00766、中位數 +0.01417
+- 正值天數 142/251（56.6%）
+- 絕對值最大的 5 天佔全年總和 -31.1%
+- 絕對值最大的 20 天佔全年總和 -8.8%
+
+## 判讀
+
+2016：全年普遍存在，傾向真實 regime
+
+中位數與平均差距越大、少數天數佔比越高，越像雜訊而非穩定現象。
+

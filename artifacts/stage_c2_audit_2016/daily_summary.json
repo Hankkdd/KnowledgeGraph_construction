@@ -1,0 +1,26 @@
+{
+  "2016": {
+    "mean_diff": 0.05341236247912699,
+    "median_diff": 0.0322570849,
+    "trimmed_mean_5_95": 0.05410367079035398,
+    "positive_days": 148,
+    "n_days": 252,
+    "mean_after_dropping_10": 0.038633032948842974,
+    "mean_after_dropping_40": 0.021940065946603776,
+    "retained_after_dropping_40": 0.4107675625690163,
+    "seed_wins": 5,
+    "n_seeds": 5
+  },
+  "2017": {
+    "mean_diff": 0.007657917362549803,
+    "median_diff": 0.014172637839999998,
+    "trimmed_mean_5_95": 0.009330478801422223,
+    "positive_days": 142,
+    "n_days": 251,
+    "mean_after_dropping_10": 0.00861925158954357,
+    "mean_after_dropping_40": 0.008924163594312796,
+    "retained_after_dropping_40": 1.1653512530646295,
+    "seed_wins": 5,
+    "n_seeds": 5
+  }
+}
