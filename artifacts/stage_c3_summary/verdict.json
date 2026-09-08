@@ -1,0 +1,258 @@
+{
+  "passed": false,
+  "primary": {
+    "control": "topology_shuffle",
+    "mean_effect": 0.0027435533608866592,
+    "ci95": [
+      -0.00024341328574110783,
+      0.0055687560562295004
+    ],
+    "wilcoxon_p": 0.10546875,
+    "seed_wins": 7,
+    "n_seeds": 10,
+    "fold_wins": 8,
+    "n_folds": 13,
+    "seed_criterion": false,
+    "fold_criterion": false,
+    "lofo_criterion": false,
+    "lofo_failures": [
+      2013,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "per_fold": {
+      "2013": 0.00093,
+      "2014": -0.01766,
+      "2015": -0.02385,
+      "2016": 0.04526,
+      "2017": 0.00075,
+      "2018": 0.01343,
+      "2019": -0.00134,
+      "2020": -0.00935,
+      "2021": -0.00113,
+      "2022": 0.00136,
+      "2023": 0.00561,
+      "2024": 0.01032,
+      "2025": 0.01134
+    },
+    "lofo": [
+      {
+        "excluded_year": 2013,
+        "seed_wins": 7,
+        "mean_effect": 0.00289,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2014,
+        "seed_wins": 9,
+        "mean_effect": 0.00444,
+        "still_passes": true
+      },
+      {
+        "excluded_year": 2015,
+        "seed_wins": 9,
+        "mean_effect": 0.00496,
+        "still_passes": true
+      },
+      {
+        "excluded_year": 2016,
+        "seed_wins": 4,
+        "mean_effect": -0.0008,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2017,
+        "seed_wins": 7,
+        "mean_effect": 0.00291,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2018,
+        "seed_wins": 7,
+        "mean_effect": 0.00185,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2019,
+        "seed_wins": 7,
+        "mean_effect": 0.00308,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2020,
+        "seed_wins": 8,
+        "mean_effect": 0.00375,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2021,
+        "seed_wins": 7,
+        "mean_effect": 0.00307,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2022,
+        "seed_wins": 7,
+        "mean_effect": 0.00286,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2023,
+        "seed_wins": 7,
+        "mean_effect": 0.0025,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2024,
+        "seed_wins": 7,
+        "mean_effect": 0.00211,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2025,
+        "seed_wins": 7,
+        "mean_effect": 0.00203,
+        "still_passes": false
+      }
+    ]
+  },
+  "secondary": {
+    "control": "relation_shuffle",
+    "mean_effect": 0.0014311105833627955,
+    "ci95": [
+      0.00030755748517916927,
+      0.0024394197046562907
+    ],
+    "wilcoxon_p": 0.037109375,
+    "seed_wins": 8,
+    "n_seeds": 10,
+    "fold_wins": 9,
+    "n_folds": 13,
+    "seed_criterion": false,
+    "fold_criterion": true,
+    "lofo_criterion": false,
+    "lofo_failures": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "per_fold": {
+      "2013": 0.00335,
+      "2014": -0.00015,
+      "2015": 0.00075,
+      "2016": -0.00393,
+      "2017": -0.00242,
+      "2018": 0.00376,
+      "2019": 0.00018,
+      "2020": 0.00858,
+      "2021": 0.00105,
+      "2022": 0.00162,
+      "2023": 0.00153,
+      "2024": 0.01051,
+      "2025": -0.00623
+    },
+    "lofo": [
+      {
+        "excluded_year": 2013,
+        "seed_wins": 7,
+        "mean_effect": 0.00127,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2014,
+        "seed_wins": 8,
+        "mean_effect": 0.00156,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2015,
+        "seed_wins": 8,
+        "mean_effect": 0.00149,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2016,
+        "seed_wins": 8,
+        "mean_effect": 0.00188,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2017,
+        "seed_wins": 8,
+        "mean_effect": 0.00175,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2018,
+        "seed_wins": 8,
+        "mean_effect": 0.00124,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2019,
+        "seed_wins": 8,
+        "mean_effect": 0.00154,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2020,
+        "seed_wins": 7,
+        "mean_effect": 0.00084,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2021,
+        "seed_wins": 8,
+        "mean_effect": 0.00146,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2022,
+        "seed_wins": 8,
+        "mean_effect": 0.00142,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2023,
+        "seed_wins": 7,
+        "mean_effect": 0.00142,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2024,
+        "seed_wins": 7,
+        "mean_effect": 0.00067,
+        "still_passes": false
+      },
+      {
+        "excluded_year": 2025,
+        "seed_wins": 8,
+        "mean_effect": 0.00207,
+        "still_passes": false
+      }
+    ]
+  },
+  "reproduced": {
+    "n_compared": 260,
+    "max_abs_diff": 0.044431647892654025,
+    "identical": false
+  }
+}

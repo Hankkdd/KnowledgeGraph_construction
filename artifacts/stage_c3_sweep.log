@@ -1,0 +1,141 @@
+格點 130 個工作單位（520 個 run），已完成 1，待跑 129
+universes=(500,) seeds=(41, 42, 43, 44, 45, 46, 47, 48, 49, 50) variants=self,real,relation_shuffle,topology_shuffle
+輸出 /home/hankdd/NYCU/KnowledgeGraph_construction/artifacts/stage_c3_gate
+[  1/129] ok  top500 y2013 seed42   713s  剩餘約 1520 分
+[  2/129] ok  top500 y2013 seed43   718s  剩餘約 760 分
+[  3/129] ok  top500 y2013 seed44   727s  剩餘約 509 分
+[  4/129] ok  top500 y2013 seed45   727s  剩餘約 379 分
+[  5/129] ok  top500 y2013 seed46   728s  剩餘約 301 分
+[  6/129] ok  top500 y2013 seed47   729s  剩餘約 249 分
+[  7/129] ok  top500 y2013 seed48   715s  剩餘約 415 分
+[  8/129] ok  top500 y2013 seed49   717s  剩餘約 362 分
+[  9/129] ok  top500 y2014 seed42   709s  剩餘約 319 分
+[ 10/129] ok  top500 y2013 seed50   724s  剩餘約 288 分
+[ 11/129] ok  top500 y2014 seed43   722s  剩餘約 259 分
+[ 12/129] ok  top500 y2014 seed41   725s  剩餘約 236 分
+[ 13/129] ok  top500 y2014 seed45   725s  剩餘約 321 分
+[ 14/129] ok  top500 y2014 seed44   738s  剩餘約 296 分
+[ 15/129] ok  top500 y2014 seed46   734s  剩餘約 275 分
+[ 16/129] ok  top500 y2014 seed48   721s  剩餘約 256 分
+[ 17/129] ok  top500 y2014 seed49   721s  剩餘約 239 分
+[ 18/129] ok  top500 y2014 seed47   725s  剩餘約 224 分
+[ 19/129] ok  top500 y2014 seed50   728s  剩餘約 279 分
+[ 20/129] ok  top500 y2015 seed41   739s  剩餘約 264 分
+[ 21/129] ok  top500 y2015 seed45   729s  剩餘約 249 分
+[ 22/129] ok  top500 y2015 seed43   736s  剩餘約 236 分
+[ 23/129] ok  top500 y2015 seed42   737s  剩餘約 223 分
+[ 24/129] ok  top500 y2015 seed44   736s  剩餘約 212 分
+[ 25/129] ok  top500 y2015 seed46   743s  剩餘約 252 分
+[ 26/129] ok  top500 y2015 seed49   736s  剩餘約 241 分
+[ 27/129] ok  top500 y2015 seed48   738s  剩餘約 229 分
+[ 28/129] ok  top500 y2015 seed50   735s  剩餘約 219 分
+[ 29/129] ok  top500 y2015 seed47   739s  剩餘約 209 分
+[ 30/129] ok  top500 y2016 seed41   734s  剩餘約 200 分
+[ 31/129] ok  top500 y2016 seed42   724s  剩餘約 229 分
+[ 32/129] ok  top500 y2016 seed43   724s  剩餘約 221 分
+[ 33/129] ok  top500 y2016 seed44   729s  剩餘約 212 分
+[ 34/129] ok  top500 y2016 seed47   728s  剩餘約 204 分
+[ 35/129] ok  top500 y2016 seed46   735s  剩餘約 196 分
+[ 36/129] ok  top500 y2016 seed45   736s  剩餘約 189 分
+[ 37/129] ok  top500 y2016 seed48   736s  剩餘約 211 分
+[ 38/129] ok  top500 y2017 seed43   717s  剩餘約 203 分
+[ 39/129] ok  top500 y2017 seed42   727s  剩餘約 196 分
+[ 40/129] ok  top500 y2017 seed41   738s  剩餘約 190 分
+[ 41/129] ok  top500 y2016 seed49   745s  剩餘約 183 分
+[ 42/129] ok  top500 y2016 seed50   740s  剩餘約 177 分
+[ 43/129] ok  top500 y2017 seed44   743s  剩餘約 194 分
+[ 44/129] ok  top500 y2017 seed45   752s  剩餘約 188 分
+[ 45/129] ok  top500 y2017 seed46   744s  剩餘約 182 分
+[ 46/129] ok  top500 y2017 seed48   738s  剩餘約 176 分
+[ 47/129] ok  top500 y2017 seed49   741s  剩餘約 170 分
+[ 48/129] ok  top500 y2017 seed47   743s  剩餘約 165 分
+[ 49/129] ok  top500 y2018 seed42   786s  剩餘約 181 分
+[ 50/129] ok  top500 y2018 seed44   812s  剩餘約 176 分
+[ 51/129] ok  top500 y2017 seed50   840s  剩餘約 170 分
+[ 52/129] ok  top500 y2018 seed45   823s  剩餘約 165 分
+[ 53/129] ok  top500 y2018 seed41   833s  剩餘約 160 分
+[ 54/129] ok  top500 y2018 seed43   836s  剩餘約 155 分
+[ 55/129] ok  top500 y2018 seed46   685s  剩餘約 164 分
+[ 56/129] ok  top500 y2018 seed47   713s  剩餘約 160 分
+[ 57/129] ok  top500 y2018 seed48   715s  剩餘約 156 分
+[ 58/129] ok  top500 y2018 seed50   710s  剩餘約 151 分
+[ 59/129] ok  top500 y2018 seed49   716s  剩餘約 146 分
+[ 60/129] ok  top500 y2019 seed41   708s  剩餘約 142 分
+[ 61/129] ok  top500 y2019 seed42   673s  剩餘約 149 分
+[ 62/129] ok  top500 y2019 seed43   696s  剩餘約 145 分
+[ 63/129] ok  top500 y2019 seed46   697s  剩餘約 141 分
+[ 64/129] ok  top500 y2019 seed44   701s  剩餘約 137 分
+[ 65/129] ok  top500 y2019 seed47   699s  剩餘約 133 分
+[ 66/129] ok  top500 y2019 seed45   705s  剩餘約 129 分
+[ 67/129] ok  top500 y2019 seed48   677s  剩餘約 134 分
+[ 68/129] ok  top500 y2019 seed49   696s  剩餘約 131 分
+[ 69/129] ok  top500 y2019 seed50   714s  剩餘約 128 分
+[ 70/129] ok  top500 y2020 seed41   716s  剩餘約 124 分
+[ 71/129] ok  top500 y2020 seed42   715s  剩餘約 120 分
+[ 72/129] ok  top500 y2020 seed43   712s  剩餘約 116 分
+[ 73/129] ok  top500 y2020 seed44   727s  剩餘約 120 分
+[ 74/129] ok  top500 y2020 seed45   682s  剩餘約 117 分
+[ 75/129] ok  top500 y2020 seed46   696s  剩餘約 114 分
+[ 76/129] ok  top500 y2020 seed48   698s  剩餘約 110 分
+[ 77/129] ok  top500 y2020 seed49   698s  剩餘約 107 分
+[ 78/129] ok  top500 y2020 seed47   700s  剩餘約 104 分
+[ 79/129] ok  top500 y2020 seed50   705s  剩餘約 107 分
+[ 80/129] ok  top500 y2021 seed41   656s  剩餘約 103 分
+[ 81/129] ok  top500 y2021 seed43   700s  剩餘約 101 分
+[ 82/129] ok  top500 y2021 seed42   707s  剩餘約 98 分
+[ 83/129] ok  top500 y2021 seed45   702s  剩餘約 94 分
+[ 84/129] ok  top500 y2021 seed44   707s  剩餘約 91 分
+[ 85/129] ok  top500 y2021 seed47   712s  剩餘約 93 分
+[ 86/129] ok  top500 y2021 seed46   720s  剩餘約 90 分
+[ 87/129] ok  top500 y2021 seed50   691s  剩餘約 88 分
+[ 88/129] ok  top500 y2021 seed48   708s  剩餘約 85 分
+[ 89/129] ok  top500 y2022 seed41   700s  剩餘約 82 分
+[ 90/129] ok  top500 y2021 seed49   711s  剩餘約 79 分
+[ 91/129] ok  top500 y2022 seed43   732s  剩餘約 80 分
+[ 92/129] ok  top500 y2022 seed42   743s  剩餘約 77 分
+[ 93/129] ok  top500 y2022 seed44   697s  剩餘約 75 分
+[ 94/129] ok  top500 y2022 seed47   700s  剩餘約 72 分
+[ 95/129] ok  top500 y2022 seed45   705s  剩餘約 69 分
+[ 96/129] ok  top500 y2022 seed46   705s  剩餘約 67 分
+[ 97/129] ok  top500 y2022 seed48   701s  剩餘約 67 分
+[ 98/129] ok  top500 y2022 seed49   723s  剩餘約 65 分
+[ 99/129] ok  top500 y2022 seed50   713s  剩餘約 62 分
+[100/129] ok  top500 y2023 seed41   698s  剩餘約 60 分
+[101/129] ok  top500 y2023 seed43   709s  剩餘約 57 分
+[102/129] ok  top500 y2023 seed42   710s  剩餘約 54 分
+[103/129] ok  top500 y2023 seed44   745s  剩餘約 55 分
+[104/129] ok  top500 y2023 seed45   731s  剩餘約 52 分
+[105/129] ok  top500 y2023 seed47   715s  剩餘約 50 分
+[106/129] ok  top500 y2023 seed46   724s  剩餘約 47 分
+[107/129] ok  top500 y2023 seed48   708s  剩餘約 45 分
+[108/129] ok  top500 y2023 seed49   712s  剩餘約 42 分
+格點 130 個工作單位（520 個 run），已完成 109，待跑 21
+universes=(500,) seeds=(41, 42, 43, 44, 45, 46, 47, 48, 49, 50) variants=self,real,relation_shuffle,topology_shuffle
+輸出 /home/hankdd/NYCU/KnowledgeGraph_construction/artifacts/stage_c3_gate
+[  1/21] ok  top500 y2024 seed42   800s  剩餘約 267 分
+[  2/21] ok  top500 y2024 seed43   801s  剩餘約 127 分
+[  3/21] ok  top500 y2024 seed45   804s  剩餘約 80 分
+[  4/21] ok  top500 y2023 seed50   805s  剩餘約 57 分
+[  5/21] ok  top500 y2024 seed44   806s  剩餘約 43 分
+[  6/21] ok  top500 y2024 seed41   806s  剩餘約 34 分
+[  7/21] ok  top500 y2024 seed46   736s  剩餘約 51 分
+[  8/21] ok  top500 y2025 seed41   737s  剩餘約 42 分
+[  9/21] ok  top500 y2024 seed47   743s  剩餘約 34 分
+[ 10/21] ok  top500 y2024 seed50   738s  剩餘約 28 分
+[ 11/21] ok  top500 y2024 seed49   740s  剩餘約 23 分
+[ 12/21] ok  top500 y2024 seed48   741s  剩餘約 19 分
+格點 130 個工作單位（520 個 run），已完成 121，待跑 9
+universes=(500,) seeds=(41, 42, 43, 44, 45, 46, 47, 48, 49, 50) variants=self,real,relation_shuffle,topology_shuffle
+輸出 /home/hankdd/NYCU/KnowledgeGraph_construction/artifacts/stage_c3_gate
+[  1/9] ok  top500 y2025 seed43   749s  剩餘約 100 分
+[  2/9] ok  top500 y2025 seed46   753s  剩餘約 44 分
+[  3/9] ok  top500 y2025 seed45   759s  剩餘約 25 分
+[  4/9] ok  top500 y2025 seed44   759s  剩餘約 16 分
+[  5/9] ok  top500 y2025 seed42   760s  剩餘約 10 分
+[  6/9] ok  top500 y2025 seed47   617s  剩餘約 11 分
+[  7/9] ok  top500 y2025 seed50   616s  剩餘約 7 分
+[  8/9] ok  top500 y2025 seed48   623s  剩餘約 3 分
+[  9/9] ok  top500 y2025 seed49   618s  剩餘約 0 分
+
+總耗時 23.0 分，單位平均 695s
+全部 130 個工作單位完成。

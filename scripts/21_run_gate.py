@@ -36,6 +36,9 @@ def parse_args() -> argparse.Namespace:
                    help="Use every k-th training date; 1 means full fold.")
     p.add_argument("--test-stride", type=int, default=1,
                    help="Use every k-th test date; 1 means full fold.")
+    p.add_argument("--variants", default="no_graph,self,real,relation_shuffle,topology_shuffle",
+                   help="逗號分隔。C3 去掉 no_graph——它只是價格模型基準，"
+                        "不參與語義判定。")
     p.add_argument("--output-dir", type=Path,
                    default=Path("artifacts/stage_c1_smoke"))
     return p.parse_args()
@@ -98,7 +101,7 @@ def main() -> int:
     if not len(train_dates) or not len(test_dates):
         raise SystemExit("no usable train/test dates after target mask")
 
-    variants = ("no_graph", "self", "real", "relation_shuffle", "topology_shuffle")
+    variants = tuple(v.strip() for v in args.variants.split(",") if v.strip())
     args.output_dir.mkdir(parents=True, exist_ok=True)
     results = []
     started = time.perf_counter()
